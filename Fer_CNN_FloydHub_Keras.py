@@ -68,7 +68,6 @@ dataset_test_features = dataset_test_features.astype('float32')
 dataset_train_features = dataset_train_features / 255.0
 dataset_test_features = dataset_test_features / 255.0
 
-print(dataset_train_features[0])
 print('dataset_train_features.shape:', dataset_train_features.shape)
 print('dataset_train_labels.shape:', dataset_train_labels.shape)
 print('dataset_test_features.shape:', dataset_test_features.shape)

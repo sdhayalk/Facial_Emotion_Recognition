@@ -96,32 +96,34 @@ def neural_net_model(x):
 
     x = tf.reshape(x, [-1, dimension, dimension, number_of_channels])
 
-    x = tf.contrib.layers.batch_norm(x)
     layer_conv1, weights_conv1 = new_conv_layer(input=x, num_input_channels=number_of_channels, filter_size=3, num_filters=64, use_pooling=False, use_padding=True)
     layer_conv2, weights_conv2 = new_conv_layer(input=layer_conv1, num_input_channels=64, filter_size=3, num_filters=64, use_pooling=True, use_padding=True)
+    layer_conv2 = tf.contrib.layers.batch_norm(layer_conv2)
     layer_conv2 = tf.nn.dropout(layer_conv2, dropout)
 
-    layer_conv2 = tf.contrib.layers.batch_norm(layer_conv2)
     layer_conv3, weights_conv3 = new_conv_layer(input=layer_conv2, num_input_channels=64, filter_size=3, num_filters=128, use_pooling=False, use_padding=True)
     layer_conv4, weights_conv4 = new_conv_layer(input=layer_conv3, num_input_channels=128, filter_size=3, num_filters=128, use_pooling=True, use_padding=True)
+    layer_conv4 = tf.contrib.layers.batch_norm(layer_conv4)
     layer_conv4 = tf.nn.dropout(layer_conv4, dropout)
 
-    layer_conv4 = tf.contrib.layers.batch_norm(layer_conv4)
     layer_conv5, weights_conv5 = new_conv_layer(input=layer_conv4, num_input_channels=128, filter_size=3, num_filters=256, use_pooling=False, use_padding=True)
     layer_conv6, weights_conv6 = new_conv_layer(input=layer_conv5, num_input_channels=256, filter_size=3, num_filters=256, use_pooling=False, use_padding=True)
     layer_conv7, weights_conv7 = new_conv_layer(input=layer_conv6, num_input_channels=256, filter_size=3, num_filters=256, use_pooling=True, use_padding=True)
+    layer_conv7 = tf.contrib.layers.batch_norm(layer_conv7)
     layer_conv7 = tf.nn.dropout(layer_conv7, dropout)
 
     layer_conv7 = tf.contrib.layers.batch_norm(layer_conv7)
     layer_conv8, weights_conv8 = new_conv_layer(input=layer_conv7, num_input_channels=256, filter_size=3, num_filters=512, use_pooling=False, use_padding=True)
     layer_conv9, weights_conv9 = new_conv_layer(input=layer_conv8, num_input_channels=512, filter_size=3, num_filters=512, use_pooling=False, use_padding=True)
     layer_conv10, weights_conv10 = new_conv_layer(input=layer_conv9, num_input_channels=512, filter_size=3, num_filters=512, use_pooling=True, use_padding=True)
+    layer_conv10 = tf.contrib.layers.batch_norm(layer_conv10)
     layer_conv10 = tf.nn.dropout(layer_conv10, dropout)
 
     layer_conv10 = tf.contrib.layers.batch_norm(layer_conv10)
     layer_conv11, weights_conv11 = new_conv_layer(input=layer_conv10, num_input_channels=512, filter_size=3, num_filters=512, use_pooling=False, use_padding=True)
     layer_conv12, weights_conv12 = new_conv_layer(input=layer_conv11, num_input_channels=512, filter_size=3, num_filters=512, use_pooling=False, use_padding=True)
     layer_conv13, weights_conv13 = new_conv_layer(input=layer_conv12, num_input_channels=512, filter_size=3, num_filters=512, use_pooling=True, use_padding=True)
+    layer_conv13 = tf.contrib.layers.batch_norm(layer_conv13)
 
     layer_flat, num_features = flatten_layer(layer_conv10)
     layer_fc1 = new_fc_layer(input=layer_flat, num_inputs=num_features, num_outputs=4096, use_relu=True)
@@ -172,6 +174,11 @@ dataset_train_features = pickle_retrieve('/input/dataset_train_features.pickle')
 dataset_train_labels = pickle_retrieve('/input/dataset_train_labels.pickle')
 dataset_test_features = pickle_retrieve('/input/dataset_test_features.pickle')
 dataset_test_labels = pickle_retrieve('/input/dataset_test_labels.pickle')
+
+dataset_train_features = dataset_train_features.astype('float32')
+dataset_test_features = dataset_test_features.astype('float32')
+dataset_train_features = dataset_train_features / 255.0
+dataset_test_features = dataset_test_features / 255.0
 
 print('dataset_train_features.shape:', dataset_train_features.shape)
 print('dataset_train_labels.shape:', dataset_train_labels.shape)
